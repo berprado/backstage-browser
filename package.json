@@ -12,7 +12,7 @@
     "backstage5": "electron . --sala=backstage5",
     "backstage6": "electron . --sala=backstage6"
   },
-  "author": "Berchis",
+  "author": "Don Bercho",
   "license": "ISC",
   "devDependencies": {
     "electron": "^37.2.4"
