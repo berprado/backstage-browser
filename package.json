@@ -1,0 +1,21 @@
+{
+  "name": "backstage-browser",
+  "version": "1.0.0",
+  "description": "Navegador personalizado para salas de karaoke Backstage",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "backstage1": "electron . --sala=backstage1",
+    "backstage2": "electron . --sala=backstage2",
+    "backstage3": "electron . --sala=backstage3",
+    "backstage4": "electron . --sala=backstage4",
+    "backstage5": "electron . --sala=backstage5",
+    "backstage6": "electron . --sala=backstage6"
+  },
+  "author": "Berchis",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^37.2.4"
+  }
+}
+
