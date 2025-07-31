@@ -1,23 +1,30 @@
-const { app, BrowserWindow } = require('electron');
-const path = require('path');
+const { app, ipcMain, BrowserWindow } = require('electron');
+const createWindow = require('./windows/createWindow');
+const log = require('./utils/logger');
 
 // Detectar parámetro --sala=backstageX
 const salaArg = process.argv.find(arg => arg.startsWith('--sala='));
 const perfil = salaArg ? salaArg.split('=')[1] : 'default';
 
-function createWindow () {
-  const win = new BrowserWindow({
-    fullscreen: true,
-    kiosk: true,
-    icon: path.join(__dirname, 'icon.ico'),
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      partition: `persist:${perfil}`
-    }
-  });
+app.whenReady().then(() => {
+  log.info(`Iniciando aplicación para la sala: ${perfil}`);
+  createWindow(perfil);
+});
 
-  win.loadURL('https://www.youtube.com');
-}
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
 
-app.whenReady().then(createWindow);
+process.on('uncaughtException', (error) => {
+  log.error('Error no capturado:', error);
+});
+
+ipcMain.on('go-back', (event) => {
+  const focusedWindow = BrowserWindow.getFocusedWindow();
+  if (focusedWindow && focusedWindow.webContents.canGoBack()) {
+    focusedWindow.webContents.goBack();
+  }
+});
 
