@@ -21,10 +21,25 @@ process.on('uncaughtException', (error) => {
   log.error('Error no capturado:', error);
 });
 
-ipcMain.on('go-back', (event) => {
+ipcMain.on('go-back', () => {
   const focusedWindow = BrowserWindow.getFocusedWindow();
-  if (focusedWindow && focusedWindow.webContents.canGoBack()) {
-    focusedWindow.webContents.goBack();
+  if (focusedWindow) {
+    focusedWindow.webContents.canGoBack().then(canGoBack => {
+      if (canGoBack) {
+        return focusedWindow.webContents.goBack();
+      }
+    }).catch(error => {
+      log.error('Error al navegar hacia atrás:', error);
+    });
+  }
+});
+
+ipcMain.on('exit-kiosk', () => {
+  const focusedWindow = BrowserWindow.getFocusedWindow();
+  if (focusedWindow) {
+    focusedWindow.setKiosk(false); // Salir del modo kiosko
+    focusedWindow.setIcon('icon.ico'); // Establecer el ícono
+    focusedWindow.setTitle('BackStage Karaoke'); // Establecer el título
   }
 });
 
