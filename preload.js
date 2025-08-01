@@ -38,10 +38,12 @@ window.addEventListener('DOMContentLoaded', () => {
   const backButtonToolbar = createButton('⏪', () => history.back());
   const reloadButton = createButton('🔁', () => location.reload());
   const homeButton = createButton('🏠', () => location.href = 'https://www.youtube.com/');
+  const topButton = createButton('🔝', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
   toolbar.appendChild(backButtonToolbar);
   toolbar.appendChild(reloadButton);
   toolbar.appendChild(homeButton);
+  toolbar.appendChild(topButton);
 
   document.body.appendChild(toolbar);
 });
