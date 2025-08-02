@@ -1,14 +1,24 @@
+
 const { app, ipcMain, BrowserWindow } = require('electron');
 const createWindow = require('./windows/createWindow');
 const log = require('./utils/logger');
+const configureUserData = require('./utils/configureUserData');
 
-// Detectar parámetro --sala=backstageX
-const salaArg = process.argv.find(arg => arg.startsWith('--sala='));
-const perfil = salaArg ? salaArg.split('=')[1] : 'default';
+// Configurar userData y obtener el perfil de sala
+const perfil = configureUserData();
+
 
 app.whenReady().then(() => {
   log.info(`Iniciando aplicación para la sala: ${perfil}`);
-  createWindow(perfil);
+  const mainWindow = createWindow(perfil);
+
+  // Manejo global de errores de carga
+  if (mainWindow && mainWindow.webContents) {
+    mainWindow.webContents.on('did-fail-load', () => {
+      log.error('Error al cargar la página principal. Mostrando página de error amigable.');
+      mainWindow.loadFile('assets/error.html');
+    });
+  }
 });
 
 app.on('window-all-closed', () => {
