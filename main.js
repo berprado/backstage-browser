@@ -1,21 +1,23 @@
 
 const { app, ipcMain, BrowserWindow } = require('electron');
 const createWindow = require('./windows/createWindow');
-const log = require('./utils/logger');
+const { createLogger } = require('./utils/logger');
 const configureUserData = require('./utils/configureUserData');
 
 // Configurar userData y obtener el perfil de sala
 const perfil = configureUserData();
 
+// Crear logger específico para esta sala
+const logger = createLogger(perfil);
 
 app.whenReady().then(() => {
-  log.info(`Iniciando aplicación para la sala: ${perfil}`);
+  logger.info(`🚀 Iniciando aplicación para la sala: ${perfil}`);
   const mainWindow = createWindow(perfil);
 
   // Manejo global de errores de carga
   if (mainWindow && mainWindow.webContents) {
     mainWindow.webContents.on('did-fail-load', () => {
-      log.error('Error al cargar la página principal. Mostrando página de error amigable.');
+      logger.error('Error al cargar la página principal. Mostrando página de error amigable.');
       mainWindow.loadFile('assets/error.html');
     });
   }
@@ -23,12 +25,13 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    logger.info('🔴 Cerrando aplicación - todas las ventanas cerradas');
     app.quit();
   }
 });
 
 process.on('uncaughtException', (error) => {
-  log.error('Error no capturado:', error);
+  logger.error('Error no capturado:', error);
 });
 
 ipcMain.on('go-back', () => {
@@ -36,10 +39,11 @@ ipcMain.on('go-back', () => {
   if (focusedWindow) {
     focusedWindow.webContents.canGoBack().then(canGoBack => {
       if (canGoBack) {
+        logger.userAction('Navegación hacia atrás');
         return focusedWindow.webContents.goBack();
       }
     }).catch(error => {
-      log.error('Error al navegar hacia atrás:', error);
+      logger.error('Error al navegar hacia atrás:', error);
     });
   }
 });
@@ -47,6 +51,7 @@ ipcMain.on('go-back', () => {
 ipcMain.on('exit-kiosk', () => {
   const focusedWindow = BrowserWindow.getFocusedWindow();
   if (focusedWindow) {
+    logger.userAction('Salir del modo kiosko');
     focusedWindow.setKiosk(false); // Salir del modo kiosko
     focusedWindow.setIcon('icon.ico'); // Establecer el ícono
     focusedWindow.setTitle('BackStage Karaoke'); // Establecer el título

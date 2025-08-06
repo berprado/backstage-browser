@@ -1,52 +1,87 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
-const config = require('../config.json');
+const { obtenerConfigSala } = require('../config/salaConfig');
 
 function createWindow(perfil) {
+  // Obtener configuración específica de la sala
+  const salaConfig = obtenerConfigSala(perfil);
+  
+  console.log(`🎪 Creando ventana para ${salaConfig.nombre}`);
+
   const splash = new BrowserWindow({
-    width: 400,
-    height: 300,
+    width: 450,
+    height: 350,
     frame: false,
     alwaysOnTop: true,
-    transparent: true
-  });
-
-  splash.loadFile(path.join(__dirname, '../assets/splash.html'));
-
-  const win = new BrowserWindow({
-    fullscreen: config.fullscreen,
-    kiosk: config.kiosk,
-    show: false,
+    transparent: true,
     webPreferences: {
-      preload: path.join(__dirname, '../preload.js'),
-      partition: `persist:${perfil}`
+      nodeIntegration: true,
+      contextIsolation: false
     }
   });
 
-  win.loadURL(config.defaultURL);
+  // Cargar splash con información de la sala
+  splash.loadFile(path.join(__dirname, '../assets/splash.html'), {
+    query: { 
+      sala: salaConfig.id,
+      nombre: salaConfig.nombre,
+      gradiente: encodeURIComponent(salaConfig.tema.gradiente)
+    }
+  });
+
+  const win = new BrowserWindow({
+    fullscreen: salaConfig.configuracion.fullscreen,
+    kiosk: salaConfig.configuracion.kiosk,
+    show: false,
+    webPreferences: {
+      preload: path.join(__dirname, '../preload.js'),
+      partition: `persist:${perfil}`,
+      nodeIntegration: false,
+      contextIsolation: true
+    }
+  });
+
+  // Cargar URL específica de la sala
+  win.loadURL(salaConfig.url);
+
+  // Configurar gestor de conexión y errores
+  const ConnectionManager = require('../utils/connectionManager');
+  const connectionManager = new ConnectionManager(win, salaConfig);
+  connectionManager.setupErrorHandling();
 
   win.once('ready-to-show', () => {
     splash.close();
     win.show();
+    console.log(`🎪 ${salaConfig.nombre} lista y visible`);
   });
 
-  win.webContents.on('did-fail-load', () => {
-    win.loadURL('file://' + path.join(__dirname, '../assets/error.html'));
-  });
-
+  // Mantener el manejo de teclas original
   win.webContents.on('before-input-event', (event, input) => {
     if (input.key === 'F11') {
       event.preventDefault();
     }
 
+    // Atajo para salir del modo kiosko: Ctrl+Alt+S
     if (input.control && input.alt && input.key.toLowerCase() === 's') {
-      win.setKiosk(false); // Salir del modo kiosko
+      win.setKiosk(false);
+      console.log(`🔓 Modo kiosko desactivado en ${salaConfig.nombre}`);
     }
 
+    // Atajo para volver al modo kiosko: Ctrl+Alt+K
     if (input.control && input.alt && input.key.toLowerCase() === 'k') {
-      win.setKiosk(true); // Volver al modo kiosko
+      win.setKiosk(true);
+      console.log(`🔒 Modo kiosko activado en ${salaConfig.nombre}`);
+    }
+
+    // Atajo para forzar recarga: Ctrl+Alt+R
+    if (input.control && input.alt && input.key.toLowerCase() === 'r') {
+      console.log(`🔄 Recarga manual solicitada en ${salaConfig.nombre}`);
+      connectionManager.forceRetry();
     }
   });
+
+  // Adjuntar el connectionManager a la ventana para acceso posterior
+  win.connectionManager = connectionManager;
 
   return win;
 }
