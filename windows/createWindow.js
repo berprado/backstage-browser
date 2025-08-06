@@ -9,8 +9,7 @@ function createWindow(perfil) {
   console.log(`[WINDOW] Creando ventana para ${salaConfig.nombre}`);
 
   const splash = new BrowserWindow({
-    width: 450,
-    height: 350,
+    fullscreen: true, // Splash a pantalla completa
     frame: false,
     alwaysOnTop: true,
     transparent: true,
@@ -33,7 +32,7 @@ function createWindow(perfil) {
     fullscreen: salaConfig.configuracion.fullscreen,
     kiosk: salaConfig.configuracion.kiosk,
     show: false,
-    icon: path.join(__dirname, '../icon.ico'), // Icono personalizado
+    icon: path.join(__dirname, '../assets/icons/icon_256x256.ico'), // Icono personalizado actualizado
     title: 'BACKSTAGE BROWSER', // Título personalizado
     webPreferences: {
       preload: path.join(__dirname, '../preload.js'),
@@ -67,7 +66,7 @@ function createWindow(perfil) {
     if (input.control && input.alt && input.key.toLowerCase() === 's') {
       win.setKiosk(false);
       win.setTitle('BACKSTAGE BROWSER'); // Forzar título al salir de kiosko
-      win.setIcon(path.join(__dirname, '../icon.ico')); // Forzar icono al salir de kiosko
+      win.setIcon(path.join(__dirname, '../assets/icons/icon_256x256.ico')); // Forzar icono actualizado
       console.log(`[KIOSK] Modo kiosko desactivado en ${salaConfig.nombre}`);
     }
 
