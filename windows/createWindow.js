@@ -6,7 +6,7 @@ function createWindow(perfil) {
   // Obtener configuración específica de la sala
   const salaConfig = obtenerConfigSala(perfil);
   
-  console.log(`🎪 Creando ventana para ${salaConfig.nombre}`);
+  console.log(`[WINDOW] Creando ventana para ${salaConfig.nombre}`);
 
   const splash = new BrowserWindow({
     width: 450,
@@ -52,7 +52,7 @@ function createWindow(perfil) {
   win.once('ready-to-show', () => {
     splash.close();
     win.show();
-    console.log(`🎪 ${salaConfig.nombre} lista y visible`);
+    console.log(`[READY] ${salaConfig.nombre} lista y visible`);
   });
 
   // Mantener el manejo de teclas original
@@ -64,18 +64,18 @@ function createWindow(perfil) {
     // Atajo para salir del modo kiosko: Ctrl+Alt+S
     if (input.control && input.alt && input.key.toLowerCase() === 's') {
       win.setKiosk(false);
-      console.log(`🔓 Modo kiosko desactivado en ${salaConfig.nombre}`);
+      console.log(`[KIOSK] Modo kiosko desactivado en ${salaConfig.nombre}`);
     }
 
     // Atajo para volver al modo kiosko: Ctrl+Alt+K
     if (input.control && input.alt && input.key.toLowerCase() === 'k') {
       win.setKiosk(true);
-      console.log(`🔒 Modo kiosko activado en ${salaConfig.nombre}`);
+      console.log(`[KIOSK] Modo kiosko activado en ${salaConfig.nombre}`);
     }
 
     // Atajo para forzar recarga: Ctrl+Alt+R
     if (input.control && input.alt && input.key.toLowerCase() === 'r') {
-      console.log(`🔄 Recarga manual solicitada en ${salaConfig.nombre}`);
+      console.log(`[RELOAD] Recarga manual solicitada en ${salaConfig.nombre}`);
       connectionManager.forceRetry();
     }
   });

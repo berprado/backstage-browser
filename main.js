@@ -11,13 +11,13 @@ const perfil = configureUserData();
 const logger = createLogger(perfil);
 
 app.whenReady().then(() => {
-  logger.info(`🚀 Iniciando aplicación para la sala: ${perfil}`);
+  logger.info(`[INIT] Iniciando aplicacion para la sala: ${perfil}`);
   const mainWindow = createWindow(perfil);
 
   // Manejo global de errores de carga
   if (mainWindow && mainWindow.webContents) {
     mainWindow.webContents.on('did-fail-load', () => {
-      logger.error('Error al cargar la página principal. Mostrando página de error amigable.');
+      logger.error('Error al cargar la pagina principal. Mostrando pagina de error amigable.');
       mainWindow.loadFile('assets/error.html');
     });
   }
@@ -25,7 +25,7 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    logger.info('🔴 Cerrando aplicación - todas las ventanas cerradas');
+    logger.info('[CLOSE] Cerrando aplicacion - todas las ventanas cerradas');
     app.quit();
   }
 });
@@ -39,7 +39,7 @@ ipcMain.on('go-back', () => {
   if (focusedWindow) {
     focusedWindow.webContents.canGoBack().then(canGoBack => {
       if (canGoBack) {
-        logger.userAction('Navegación hacia atrás');
+        logger.userAction('Navegacion hacia atras');
         return focusedWindow.webContents.goBack();
       }
     }).catch(error => {

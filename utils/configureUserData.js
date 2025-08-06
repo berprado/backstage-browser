@@ -13,7 +13,7 @@ function configureUserData() {
   const userDataPath = path.join(app.getPath('appData'), `backstage/${sala}`);
   app.setPath('userData', userDataPath);
 
-  console.log(`✅ userData path configurado para: ${userDataPath}`);
+  console.log(`[OK] userData path configurado para: ${userDataPath}`);
   return sala;
 }
 

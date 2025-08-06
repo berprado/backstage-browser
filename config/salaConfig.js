@@ -2,7 +2,11 @@
  * 🏢 Configuración específica por sala
  * 
  * Este archivo centraliza toda la configuración individual de cada sala,
- * permitiendo personalizar URLs, temas, comportamientos y características
+ * permitiendo personalizar URLs, temas, comportamie    console.warn(`[WARN] Configuración no encontrada para sala: ${salaId}. Usando configuración por defecto.`);
+    return getSalaConfig('backstage1'); // Fallback a sala por defecto
+  }
+  
+  console.log(`[OK] Configuración cargada para ${config.nombre} (${salaId})`);y características
  * específicas para cada ubicación.
  */
 
@@ -176,11 +180,11 @@ function obtenerConfigSala(salaId) {
   const config = salaConfigs[salaId];
   
   if (!config) {
-    console.warn(`⚠️ Configuración no encontrada para sala: ${salaId}. Usando configuración por defecto.`);
+    console.warn(`[WARN] Configuracion no encontrada para sala: ${salaId}. Usando configuracion por defecto.`);
     return salaConfigs.backstage1; // Fallback a sala principal
   }
   
-  console.log(`✅ Configuración cargada para ${config.nombre} (${salaId})`);
+  console.log(`[OK] Configuracion cargada para ${config.nombre} (${salaId})`);
   return config;
 }
 

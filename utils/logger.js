@@ -18,7 +18,7 @@ class Logger {
     this.maxLogFiles = 5;
     
     this.ensureLogDirectory();
-    this.info(`🚀 Logger iniciado para sala: ${sala}`);
+    this.info(`[INIT] Logger iniciado para sala: ${sala}`);
   }
 
   /**
@@ -84,7 +84,7 @@ class Logger {
         fs.renameSync(this.logFile, `${this.logFile}.1`);
       }
       
-      console.log(`📁 Log rotado para sala ${this.sala}`);
+      console.log(`[ROTATE] Log rotado para sala ${this.sala}`);
     } catch (error) {
       console.error(`Error rotando log: ${error.message}`);
     }
@@ -95,7 +95,7 @@ class Logger {
    */
   info(message) {
     const coloredMessage = `\x1b[36m${message}\x1b[0m`; // Cyan
-    console.log(`[${this.sala.toUpperCase()}] ${coloredMessage}`);
+    console.log(`[${this.sala.toUpperCase()}] [INFO] ${message}`);
     this.writeToFile('INFO', message);
   }
 
@@ -104,8 +104,8 @@ class Logger {
    */
   error(message, error = null) {
     const fullMessage = error ? `${message} - ${error.message || error}` : message;
-    const coloredMessage = `\x1b[31m❌ ${fullMessage}\x1b[0m`; // Red
-    console.error(`[${this.sala.toUpperCase()}] ${coloredMessage}`);
+    const coloredMessage = `\x1b[31m[ERROR] ${fullMessage}\x1b[0m`; // Red
+    console.error(`[${this.sala.toUpperCase()}] [ERROR] ${fullMessage}`);
     this.writeToFile('ERROR', fullMessage);
     
     // Si hay stack trace, también lo guardamos
@@ -118,8 +118,8 @@ class Logger {
    * Log de advertencias
    */
   warn(message) {
-    const coloredMessage = `\x1b[33m⚠️ ${message}\x1b[0m`; // Yellow
-    console.warn(`[${this.sala.toUpperCase()}] ${coloredMessage}`);
+    const coloredMessage = `\x1b[33m[WARN] ${message}\x1b[0m`; // Yellow
+    console.warn(`[${this.sala.toUpperCase()}] [WARN] ${message}`);
     this.writeToFile('WARN', message);
   }
 
@@ -128,8 +128,8 @@ class Logger {
    */
   debug(message) {
     if (process.env.NODE_ENV === 'development') {
-      const coloredMessage = `\x1b[90m🐛 ${message}\x1b[0m`; // Gray
-      console.log(`[${this.sala.toUpperCase()}] ${coloredMessage}`);
+      const coloredMessage = `\x1b[90m[DEBUG] ${message}\x1b[0m`; // Gray
+      console.log(`[${this.sala.toUpperCase()}] [DEBUG] ${message}`);
       this.writeToFile('DEBUG', message);
     }
   }
@@ -139,21 +139,21 @@ class Logger {
    */
   connection(message, status = 'info') {
     const icons = {
-      'success': '🟢',
-      'error': '🔴',
-      'warning': '🟡',
-      'info': '🔵'
+      'success': '[OK]',
+      'error': '[ERROR]',
+      'warning': '[WARN]',
+      'info': '[NET]'
     };
     
-    const icon = icons[status] || '🔵';
-    const coloredMessage = `${icon} CONEXIÓN: ${message}`;
+    const icon = icons[status] || '[NET]';
+    const fullMessage = `${icon} CONEXION: ${message}`;
     
     if (status === 'error') {
-      this.error(coloredMessage);
+      this.error(fullMessage);
     } else if (status === 'warning') {
-      this.warn(coloredMessage);
+      this.warn(fullMessage);
     } else {
-      this.info(coloredMessage);
+      this.info(fullMessage);
     }
   }
 
@@ -161,7 +161,7 @@ class Logger {
    * Log de eventos de usuario
    */
   userAction(action, details = '') {
-    const message = `👤 USUARIO: ${action}${details ? ` - ${details}` : ''}`;
+    const message = `[USER] USUARIO: ${action}${details ? ` - ${details}` : ''}`;
     this.info(message);
   }
 
@@ -169,7 +169,7 @@ class Logger {
    * Log de rendimiento
    */
   performance(operation, duration) {
-    const message = `⚡ RENDIMIENTO: ${operation} completado en ${duration}ms`;
+    const message = `[PERF] RENDIMIENTO: ${operation} completado en ${duration}ms`;
     this.info(message);
   }
 
