@@ -33,6 +33,8 @@ function createWindow(perfil) {
     fullscreen: salaConfig.configuracion.fullscreen,
     kiosk: salaConfig.configuracion.kiosk,
     show: false,
+    icon: path.join(__dirname, '../icon.ico'), // Icono personalizado
+    title: 'BACKSTAGE BROWSER', // Título personalizado
     webPreferences: {
       preload: path.join(__dirname, '../preload.js'),
       partition: `persist:${perfil}`,
@@ -64,6 +66,8 @@ function createWindow(perfil) {
     // Atajo para salir del modo kiosko: Ctrl+Alt+S
     if (input.control && input.alt && input.key.toLowerCase() === 's') {
       win.setKiosk(false);
+      win.setTitle('BACKSTAGE BROWSER'); // Forzar título al salir de kiosko
+      win.setIcon(path.join(__dirname, '../icon.ico')); // Forzar icono al salir de kiosko
       console.log(`[KIOSK] Modo kiosko desactivado en ${salaConfig.nombre}`);
     }
 
