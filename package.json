@@ -13,8 +13,8 @@
     "backstage5": "electron . --sala=backstage5",
     "backstage6": "electron . --sala=backstage6"
   },
-  "author": "Don Bercho",
-  "license": "ISC",
+  "author": "BERNARDO PRADO",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^37.2.4",
     "electron-builder": "^26.0.12"
@@ -24,13 +24,23 @@
   },
   "build": {
     "appId": "com.backstage.browser",
-    "productName": "BackStage Browser",
-    "win": {
-      "icon": "assets/icons/icon_256x256.ico",
-      "target": "nsis"
-    },
+    "productName": "Backstage Browser",
     "directories": {
-      "buildResources": "assets/icons"
+      "output": "dist"
+    },
+    "files": [
+      "**/*"
+    ],
+    "win": {
+      "icon": "icon.ico",
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
     }
   }
 }
