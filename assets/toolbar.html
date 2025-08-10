@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú flotante</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      pointer-events: none;
+    }
+    #toolbar {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      gap: 18px;
+  padding: 28px 24px;
+  background-color: #181818ee;
+  border-radius: 16px 16px 16px 16px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.38);
+      pointer-events: auto;
+    }
+    .toolbar-btn {
+      padding: 10px;
+      background-color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .toolbar-btn img {
+      width: 32px;
+      height: 32px;
+      display: block;
+      pointer-events: none;
+    }
+    .toolbar-btn:hover {
+      transform: scale(1.13);
+    }
+  </style>
+</head>
+<body>
+  <div id="toolbar">
+    <button class="toolbar-btn" id="btn-back" title="Atrás">
+      <img src="../assets/images/icons8-slide-back-96.png" alt="Atrás">
+    </button>
+    <button class="toolbar-btn" id="btn-reload" title="Recargar">
+      <img src="../assets/images/icons8-refresh-96.png" alt="Recargar">
+    </button>
+    <button class="toolbar-btn" id="btn-home" title="Inicio">
+      <img src="../assets/images/icons8-home-96.png" alt="Inicio">
+    </button>
+    <button class="toolbar-btn" id="btn-top" title="Arriba">
+      <img src="../assets/images/icons8-slide-up-96.png" alt="Arriba">
+    </button>
+  </div>
+  <script>
+    const { ipcRenderer } = require('electron');
+    document.getElementById('btn-back').onclick = () => ipcRenderer.send('toolbar-action', 'back');
+    document.getElementById('btn-reload').onclick = () => ipcRenderer.send('toolbar-action', 'reload');
+    document.getElementById('btn-home').onclick = () => ipcRenderer.send('toolbar-action', 'home');
+    document.getElementById('btn-top').onclick = () => ipcRenderer.send('toolbar-action', 'top');
+  </script>
+</body>
+</html>

@@ -76,6 +76,8 @@ function createWindow(perfil) {
     // Atajo para volver al modo kiosko: Ctrl+Alt+K
     if (input.control && input.alt && input.key.toLowerCase() === 'k') {
       win.setKiosk(true);
+      // Emitir manualmente el evento 'enter-kiosk' para que el menú flotante reaparezca
+      win.emit('enter-kiosk');
       console.log(`[KIOSK] Modo kiosko activado en ${salaConfig.nombre}`);
     }
 
