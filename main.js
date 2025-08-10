@@ -131,7 +131,7 @@ ipcMain.on('toolbar-action', (event, action) => {
       break;
     }
     case 'reload':
-      logger.userAction('Recargar página');
+      logger.userAction('Recargar pagina');
       mainWindow.webContents.reload();
       break;
     case 'home':
