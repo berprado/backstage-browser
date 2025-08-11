@@ -101,7 +101,7 @@ app.whenReady().then(() => {
           setToolbarPosition();
         }
       });
-    }, 8000); // Espera igual al splash
+    }, 10000); // Espera igual al splash
   });
 });
 
