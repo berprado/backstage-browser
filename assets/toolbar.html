@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Menú flotante</title>
+  <!-- Preload de imágenes para evitar parpadeos la primera vez -->
+  <link rel="preload" as="image" href="../assets/images/boton_logo.png">
+  <link rel="preload" as="image" href="../assets/images/icons8-slide-back-96.png">
+  <link rel="preload" as="image" href="../assets/images/icons8-refresh-96.png">
+  <link rel="preload" as="image" href="../assets/images/icons8-home-96.png">
+  <link rel="preload" as="image" href="../assets/images/icons8-slide-up-96.png">
   <style>
     body {
       margin: 0;
@@ -71,6 +77,8 @@
       transform-origin: center;
       will-change: transform;
     }
+  /* Pausar latido cuando el menú está abierto */
+  body.menu-open #menu-toggle img { animation-play-state: paused; transform: scale(1); }
     @keyframes heartbeat {
       0% { transform: scale(1); }
       12% { transform: scale(1.10); }
@@ -78,6 +86,18 @@
       36% { transform: scale(1.06); }
       48% { transform: scale(1); }
       100% { transform: scale(1); }
+    }
+
+    /* Accesibilidad: respetar preferencia de reducción de movimiento */
+    @media (prefers-reduced-motion: reduce) {
+      #menu-toggle img { animation: none !important; }
+      #toolbar,
+      body.menu-open #toolbar,
+      #menu-toggle,
+      .toolbar-btn { transition: none !important; }
+      /* Evitar cambios de escala en hover/active */
+      #menu-toggle:hover, #menu-toggle:active { transform: translateX(-50%) !important; }
+      .toolbar-btn:hover { transform: none !important; }
     }
     .toolbar-btn {
       padding: 10px;
@@ -128,6 +148,19 @@
     const toolbarEl = document.getElementById('toolbar');
     const toggleBtn = document.getElementById('menu-toggle');
 
+    // Bloqueo durante la transición para evitar clics rápidos consecutivos
+    let isTransitioning = false;
+    const TRANSITION_UNLOCK_MS = 320; // > transición CSS (240ms)
+    let safetyTimer = null;
+    const unlock = () => { isTransitioning = false; };
+    const armSafetyTimer = () => { clearTimeout(safetyTimer); safetyTimer = setTimeout(unlock, TRANSITION_UNLOCK_MS); };
+    toolbarEl.addEventListener('transitionend', (e) => {
+      if (e.propertyName === 'transform' || e.propertyName === 'opacity' || e.propertyName === 'visibility') {
+        unlock();
+        clearTimeout(safetyTimer);
+      }
+    });
+
     const openMenu = () => {
       document.body.classList.add('menu-open');
       toggleBtn.setAttribute('aria-expanded', 'true');
@@ -142,7 +175,10 @@
 
     toggleBtn.addEventListener('click', (e) => {
       e.stopPropagation();
+      if (isTransitioning) return;
+      isTransitioning = true;
       toggleMenu();
+      armSafetyTimer();
     });
 
     // Cerrar con ESC
