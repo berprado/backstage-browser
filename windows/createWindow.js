@@ -51,12 +51,12 @@ function createWindow(perfil) {
   connectionManager.setupErrorHandling();
 
   win.once('ready-to-show', () => {
-    // Esperar 8 segundos antes de cerrar el splash y mostrar la ventana principal
+    // Esperar 10 segundos antes de cerrar el splash y mostrar la ventana principal
     setTimeout(() => {
       splash.close();
       win.show();
       console.log(`[READY] ${salaConfig.nombre} lista y visible`);
-    }, 8000);
+    }, 10000);
   });
 
   // Mantener el manejo de teclas original
