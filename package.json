@@ -24,23 +24,13 @@
   },
   "build": {
     "appId": "com.backstage.browser",
-    "productName": "Backstage Browser",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "**/*"
-    ],
+    "productName": "BackStage Browser",
     "win": {
-      "icon": "icon.ico",
-      "target": [
-        "nsis"
-      ]
+      "icon": "assets/icons/icon_256x256.ico",
+      "target": "nsis"
     },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true
+    "directories": {
+      "buildResources": "assets/icons"
     }
   }
 }

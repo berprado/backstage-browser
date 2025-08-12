@@ -1,36 +1,89 @@
 ```
 └── 📁backstage-browser
         └── 📁hooks
+            ├── ...
         └── 📁info
             ├── exclude
-            ├── refs
         └── 📁logs
             └── 📁refs
                 └── 📁heads
                     ├── main
+                └── 📁remotes
+                    └── 📁origin
+                        └── 📁feature
+                            ├── paso-2-funcionalidades
+                        ├── HEAD
+                        ├── main
             ├── HEAD
         └── 📁objects
+            └── 📁00
+                ├── ......
+            └── 📁info
+            └── 📁pack
+                ├── pack-6f1b02254a2fc21266dbd952718e1f091a3236c7.idx
+                ├── pack-6f1b02254a2fc21266dbd952718e1f091a3236c7.pack
+                ├── pack-6f1b02254a2fc21266dbd952718e1f091a3236c7.rev
         └── 📁refs
             └── 📁heads
+                ├── main
+            └── 📁remotes
+                └── 📁origin
+                    └── 📁feature
+                        ├── paso-2-funcionalidades
+                    ├── HEAD
+                    ├── main
             └── 📁tags
         ├── COMMIT_EDITMSG
         ├── config
         ├── description
         ├── HEAD
         ├── index
+        ├── ORIG_HEAD
         ├── packed-refs
+    └── 📁.github
+        └── 📁instructions
+            ├── paso_1.instructions.md
     └── 📁.vscode
         ├── settings.json
     └── 📁assets
+        └── 📁icons
+            ├── icon_1024x1024.ico
+            ├── icon_1024x1024.png
+            ├── icon_16x16.ico
+            ├── icon_16x16.png
+            ├── icon_20x20.ico
+            ├── icon_20x20.png
+            ├── icon_24x24.ico
+            ├── icon_24x24.png
+            ├── icon_256x256.ico
+            ├── icon_256x256.png
+            ├── icon_32x32.ico
+            ├── icon_32x32.png
+            ├── icon_40x40.ico
+            ├── icon_40x40.png
+            ├── icon_48x48.ico
+            ├── icon_48x48.png
+            ├── icon_512x512.ico
+            ├── icon_512x512.png
+            ├── icon_64x64.ico
+            ├── icon_64x64.png
+            ├── icon.icns
+            ├── icon.ico
         └── 📁images
+            ├── boton_logo.png
             ├── icons8-home-96.png
             ├── icons8-refresh-96.png
             ├── icons8-slide-back-96.png
             ├── icons8-slide-up-96.png
-            ├── logo_backstage.png
-            ├── logo.png
+        └── 📁videos
+            ├── intro.mp4
+        ├── error.html
         ├── splash.html
+        ├── toolbar.html
+    └── 📁config
+        ├── salaConfig.js
     └── 📁scripts
+        ├── backstage1.bat
         ├── backstage2.bat
         ├── backstage3.bat
         ├── backstage4.bat
@@ -38,16 +91,19 @@
         ├── backstage6.bat
         ├── generateBatFiles.js
     └── 📁utils
+        ├── configureUserData.js
+        ├── connectionManager.js
         ├── logger.js
     └── 📁windows
         ├── createWindow.js
     ├── .gitignore
-    ├── backstage1.bat
     ├── config.json
+    ├── estructura1.md
     ├── icon.ico
     ├── index.html
     ├── main.js
     ├── package-lock.json
     ├── package.json
-    └── preload.js
+    ├── preload.js
+    └── README.md
 ```
