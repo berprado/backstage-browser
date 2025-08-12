@@ -9,21 +9,75 @@
       margin: 0;
       padding: 0;
       background: transparent;
-      pointer-events: none;
+      pointer-events: none; /* Sólo los elementos interactivos podrán recibir clicks */
     }
+    :root {
+      --safe: 20px;            /* separación desde el borde inferior */
+      --toggle-size: 76px;     /* tamaño del botón lanzador */
+      --toolbar-gap: 12px;     /* separación entre botón y menú */
+    }
+    /* Estado base: menú oculto y botón lanzador visible */
     #toolbar {
       position: fixed;
       left: 50%;
-      bottom: 20px;
-      transform: translateX(-50%);
+      bottom: calc(var(--safe) + var(--toggle-size) + var(--toolbar-gap));
+      transform: translateX(-50%) translateY(12px) scale(0.98);
       z-index: 1000;
       display: flex;
       gap: 18px;
-  padding: 28px 24px;
-  background-color: #181818ee;
-  border-radius: 16px 16px 16px 16px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.38);
+      padding: 28px 24px;
+      background-color: #181818ee;
+      border-radius: 16px 16px 16px 16px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.06);
+      pointer-events: none; /* Deshabilitado cuando está oculto */
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 200ms ease, transform 240ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 240ms;
+    }
+    body.menu-open #toolbar {
+      transform: translateX(-50%) translateY(0) scale(1);
+      opacity: 1;
+      visibility: visible;
       pointer-events: auto;
+      transition: opacity 200ms ease, transform 240ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0s;
+    }
+
+    /* Botón lanzador (toggle) */
+    #menu-toggle {
+      position: fixed;
+      left: 50%;
+      bottom: var(--safe);
+      transform: translateX(-50%);
+      z-index: 1001; /* sobre el menú (no desaparece) */
+      width: var(--toggle-size);
+      height: var(--toggle-size);
+      border-radius: 50%;
+      border: none;
+      padding: 0;
+      background: #101010ee;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.55), 0 4px 10px rgba(0,0,0,0.35);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      pointer-events: auto; /* Siempre clickeable */
+      transition: transform 180ms ease, opacity 180ms ease, visibility 0s linear 180ms;
+    }
+    #menu-toggle:hover { transform: translateX(-50%) scale(1.06); }
+    #menu-toggle:active { transform: translateX(-50%) scale(0.98); }
+    #menu-toggle img {
+      width: 56px; height: 56px; display: block; pointer-events: none;
+      animation: heartbeat 1.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+      transform-origin: center;
+      will-change: transform;
+    }
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      12% { transform: scale(1.10); }
+      24% { transform: scale(1); }
+      36% { transform: scale(1.06); }
+      48% { transform: scale(1); }
+      100% { transform: scale(1); }
     }
     .toolbar-btn {
       padding: 10px;
@@ -49,7 +103,11 @@
   </style>
 </head>
 <body>
-  <div id="toolbar">
+  <button id="menu-toggle" aria-label="Mostrar menú" aria-expanded="false" title="Mostrar menú">
+    <img src="../assets/images/boton_logo.png" alt="Abrir menú"/>
+  </button>
+
+  <div id="toolbar" role="toolbar" aria-label="Menú flotante">
     <button class="toolbar-btn" id="btn-back" title="Atrás">
       <img src="../assets/images/icons8-slide-back-96.png" alt="Atrás">
     </button>
@@ -65,10 +123,38 @@
   </div>
   <script>
     const { ipcRenderer } = require('electron');
-    document.getElementById('btn-back').onclick = () => ipcRenderer.send('toolbar-action', 'back');
-    document.getElementById('btn-reload').onclick = () => ipcRenderer.send('toolbar-action', 'reload');
-    document.getElementById('btn-home').onclick = () => ipcRenderer.send('toolbar-action', 'home');
-    document.getElementById('btn-top').onclick = () => ipcRenderer.send('toolbar-action', 'top');
+  // Estado inicial: menú oculto por defecto
+
+    const toolbarEl = document.getElementById('toolbar');
+    const toggleBtn = document.getElementById('menu-toggle');
+
+    const openMenu = () => {
+      document.body.classList.add('menu-open');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+    };
+    const closeMenu = () => {
+      document.body.classList.remove('menu-open');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    };
+    const toggleMenu = () => {
+      if (document.body.classList.contains('menu-open')) closeMenu(); else openMenu();
+    };
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    // Cerrar con ESC
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // Acciones del toolbar (y cerrar luego de accionar)
+    document.getElementById('btn-back').onclick = () => { ipcRenderer.send('toolbar-action', 'back'); closeMenu(); };
+    document.getElementById('btn-reload').onclick = () => { ipcRenderer.send('toolbar-action', 'reload'); closeMenu(); };
+    document.getElementById('btn-home').onclick = () => { ipcRenderer.send('toolbar-action', 'home'); closeMenu(); };
+    document.getElementById('btn-top').onclick = () => { ipcRenderer.send('toolbar-action', 'top'); closeMenu(); };
   </script>
 </body>
 </html>

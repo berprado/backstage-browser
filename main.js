@@ -31,7 +31,7 @@ app.whenReady().then(() => {
     setTimeout(() => {
       toolbarWindow = new BrowserWindow({
         width: 400,
-        height: 130, // Aumenta la altura para que el padding superior sea visible
+        height: 260, // Altura mayor para acomodar botón (76) + gap + menú (~108) + márgenes
         frame: false,
         transparent: true,
         alwaysOnTop: true,
