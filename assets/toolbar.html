@@ -39,6 +39,9 @@
       pointer-events: none; /* Deshabilitado cuando está oculto */
       opacity: 0;
       visibility: hidden;
+  will-change: transform, opacity;
+  contain: layout paint;
+  backface-visibility: hidden;
       transition: opacity 200ms ease, transform 240ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 240ms;
     }
     body.menu-open #toolbar {
@@ -67,6 +70,10 @@
       display: grid;
       place-items: center;
       pointer-events: auto; /* Siempre clickeable */
+  will-change: transform, opacity;
+  contain: layout paint;
+  backface-visibility: hidden;
+  touch-action: manipulation;
       transition: transform 180ms ease, opacity 180ms ease, visibility 0s linear 180ms;
     }
     #menu-toggle:hover { transform: translateX(-50%) scale(1.06); }
@@ -106,10 +113,12 @@
       border-radius: 8px;
       cursor: pointer;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s;
+  transition: transform 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
+  will-change: transform;
+  touch-action: manipulation;
     }
     .toolbar-btn img {
       width: 32px;
@@ -124,21 +133,21 @@
 </head>
 <body>
   <button id="menu-toggle" aria-label="Mostrar menú" aria-expanded="false" title="Mostrar menú">
-    <img src="../assets/images/boton_logo.png" alt="Abrir menú"/>
+    <img src="../assets/images/boton_logo.png" alt="Abrir menú" decoding="async" fetchpriority="high"/>
   </button>
 
   <div id="toolbar" role="toolbar" aria-label="Menú flotante">
     <button class="toolbar-btn" id="btn-back" title="Atrás">
-      <img src="../assets/images/icons8-slide-back-96.png" alt="Atrás">
+      <img src="../assets/images/icons8-slide-back-96.png" alt="Atrás" decoding="async">
     </button>
     <button class="toolbar-btn" id="btn-reload" title="Recargar">
-      <img src="../assets/images/icons8-refresh-96.png" alt="Recargar">
+      <img src="../assets/images/icons8-refresh-96.png" alt="Recargar" decoding="async">
     </button>
     <button class="toolbar-btn" id="btn-home" title="Inicio">
-      <img src="../assets/images/icons8-home-96.png" alt="Inicio">
+      <img src="../assets/images/icons8-home-96.png" alt="Inicio" decoding="async">
     </button>
     <button class="toolbar-btn" id="btn-top" title="Arriba">
-      <img src="../assets/images/icons8-slide-up-96.png" alt="Arriba">
+      <img src="../assets/images/icons8-slide-up-96.png" alt="Arriba" decoding="async">
     </button>
   </div>
   <script>
