@@ -69,7 +69,7 @@ function createWindow(perfil) {
     if (input.control && input.alt && input.key.toLowerCase() === 's') {
       win.setKiosk(false);
       win.setTitle('BACKSTAGE BROWSER'); // Forzar título al salir de kiosko
-      win.setIcon(path.join(__dirname, '../assets/icons/icon_256x256.ico')); // Forzar icono actualizado
+      win.setIcon(path.join(__dirname, '../assets/icons/icon_1024x1024.ico')); // Forzar icono actualizado
       console.log(`[KIOSK] Modo kiosko desactivado en ${salaConfig.nombre}`);
     }
 
