@@ -48,26 +48,7 @@
     └── 📁assets
         └── 📁icons
             ├── icon_1024x1024.ico
-            ├── icon_1024x1024.png
-            ├── icon_16x16.ico
-            ├── icon_16x16.png
-            ├── icon_20x20.ico
-            ├── icon_20x20.png
-            ├── icon_24x24.ico
-            ├── icon_24x24.png
-            ├── icon_256x256.ico
-            ├── icon_256x256.png
-            ├── icon_32x32.ico
-            ├── icon_32x32.png
-            ├── icon_40x40.ico
-            ├── icon_40x40.png
-            ├── icon_48x48.ico
-            ├── icon_48x48.png
-            ├── icon_512x512.ico
-            ├── icon_512x512.png
-            ├── icon_64x64.ico
-            ├── icon_64x64.png
-            ├── icon.icns
+            ├── .....
             ├── icon.ico
         └── 📁images
             ├── boton_logo.png
